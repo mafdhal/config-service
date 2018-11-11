@@ -1,0 +1,83 @@
+entity ConfigDescriptor {
+	id String,
+    name String,
+    description String, 
+    version String
+    
+}
+entity Component {
+	id String,
+    name String,
+    serviceName String, 
+    systemName String,
+    type ComponentType
+}
+entity Feature {
+	id String,
+    name String
+}
+entity ConfigItem {
+	id String,
+    key String,
+    doc String,
+    type ConfigItemType,
+    values String,
+    defaultValue String,
+    nature String,
+    onChange String
+}
+entity Dependancy {
+	id String,
+    name String,
+    onChange String
+}
+entity ConfigSpace {
+	id String,
+    client String
+}
+entity ConfigData {
+	id String,
+    tenant String,
+    component String
+}
+entity ConfigValue {
+	id String,
+    key String,
+    value String
+}
+enum ComponentType {
+    INTERFACE, LOGIC, RESOURCE
+}
+enum ConfigItemType {
+    STRING, NUMBER, INTEGER, BOOLEAN,DATE ,OBJECT ,ARRAY
+}
+relationship OneToOne {
+	ConfigDescriptor{component} to Component
+}
+relationship ManyToMany {
+	Component{features} to Feature{components}
+}
+
+relationship OneToMany {
+	ConfigDescriptor{configItems} to ConfigItem
+}
+
+relationship OneToMany {
+	ConfigItem{dependencies} to Dependancy
+}
+
+relationship ManyToMany {
+	ConfigSpace{features} to Feature{client}
+}
+relationship OneToMany {
+	ConfigSpace{configData} to ConfigData
+}
+
+relationship OneToOne {
+	ConfigData{configDescriptor} to ConfigDescriptor
+}
+
+relationship OneToMany {
+	ConfigData{configValues} to ConfigValue
+}
+
